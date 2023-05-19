@@ -13,11 +13,12 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///test_task.db'
 db = SQLAlchemy(app)
 
 
-@app.route('/')
-def index():
-    title = "HELLO"
-    text = 'HELLO WORLD'
-    return render_template("layout.html", title=title, text=text)
+@app.route('/<question_num>')
+def index(question_num):
+    question_num = question_num
+    print(question_num)
+    return question_num
+    # return render_template("layout.html", title=title, text=text)
 
 
 @app.route('/count', methods=['GET', 'POST'])
