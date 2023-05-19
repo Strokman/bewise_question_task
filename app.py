@@ -15,6 +15,7 @@ db = SQLAlchemy(app)
 
 @app.route('/<question_num>')
 def index(question_num):
+
     question_num = question_num
     print(question_num)
     return question_num
