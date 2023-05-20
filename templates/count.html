@@ -7,7 +7,7 @@
 {% endblock %}
 
 {% block main %}
-<form method="POST">
+<form action="/count" method="POST">
     {{ form.hidden_tag() }}
 <!--    {{ form.count.label() }}-->
         {{ form.count(class='form-control mb-2 mx-auto w-25') }}

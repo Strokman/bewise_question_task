@@ -2,8 +2,6 @@ from flask import Flask, render_template, redirect, url_for, request
 from os import urandom
 from flask_sqlalchemy import SQLAlchemy
 from models import Jserviceapihandler
-from forms import CountForm
-from requests import get
 
 app = Flask(__name__)
 
@@ -13,25 +11,24 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///test_task.db'
 db = SQLAlchemy(app)
 
 
-@app.route('/<question_num>')
+@app.route('/<question_num>', methods=['POST'])
 def index(question_num):
-
     question_num = question_num
     print(question_num)
     return question_num
-    # return render_template("layout.html", title=title, text=text)
 
 
 @app.route('/count', methods=['GET', 'POST'])
 def count():
-    title = 'How much questions?'
-    form = CountForm()
-    if form.validate_on_submit():
-        count_user = form.count.data
-        print(type(count_user))
-        resp = Jserviceapihandler(count_user)
-        print(resp.json_data())
-    return render_template("count.html", title=title, form=form)
+    # title = 'How much questions?'
+    resp = Jserviceapihandler(request.json.get('questions_num'))
+    print(resp.json_data())
+    return resp.json_data()
+    #
+    # print(resp.json_data())
+    #
+    # return resp.json_data(), 200
+    # return render_template("count.html", title=title, form=form)
 
 
 # @app.route('/request')
