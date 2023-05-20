@@ -32,6 +32,7 @@ class JServiceApiHandler:
             temp_list.append(question)
         return temp_list
 
+
     def commit_to_db(self):
         for item in self.ready_data:
             try:
