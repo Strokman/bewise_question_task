@@ -1,59 +1,70 @@
 from requests import get
 from service import db
 from datetime import datetime
+from sqlalchemy import select
 from sqlalchemy.exc import IntegrityError, PendingRollbackError
 
 
-class JServiceApiHandler:
+class JServiceApiQuestion:
 
     REQUIRED_COLUMNS = ('id', 'question', 'answer', 'created_at', 'category_id')
+    TIME_FORMAT = '%Y-%m-%d %H:%M:%S.%f'
 
     def __init__(self, count):
-        self.count = count
         self.data = get(f"https://jservice.io/api/random?count={count}")
-        self.ready_data = self.extract_needed_data()
-
-    # def json_data(self):
-    #     return self.data.json()
-
-    def get_question(self):
-        counter = self.count
-        for i in range(counter):
+        self.processed_data = self.extract_needed_data()
+        # self.exists = self.check_db(self.processed_data.get('id'))
 
 
     def extract_needed_data(self):
-        temp_list = []
+        questions_list = []
         for item in self.data.json():
-            question = dict()
+            print(item)
+            d = {}
             for key, value in item.items():
+                print(key, value)
                 if key in self.REQUIRED_COLUMNS:
-                    question[key] = value
-            question['created_at'] = self.convert_time(question['created_at'].replace('Z', '').replace('T', ' '))
-            temp_list.append(question)
-        return temp_list
+                    d.setdefault(key, value)
+            d['created_at'] = self.convert_time(d['created_at'].replace('Z', '').replace('T', ' '))
+            questions_list.append(d)
+        return questions_list
 
+    # def check_db(self, id):
+    #     if db.session.execute(db.select(Question).filter_by(question_id=id)).scalar():
+    #         print(db.session.execute(db.select(Question).filter_by(question_id=id)).first())
+    #         print('exists')
+    #         return True
+    #     return False
 
     def commit_to_db(self):
-        for item in self.ready_data:
-            try:
-                question = Question(item['id'], item['question'], item['answer'],
-                                    item['created_at'], item['category_id'])
-                db.session.add(question)
-                db.session.flush()
-                db.session.commit()
-                print('ok')
-
-            except (IntegrityError, PendingRollbackError):
-                print("question exists")
-                obj = JServiceApiHandler(1)
-                obj.commit_to_db()
-                continue
-        return "Succesfull", 200
-
-
+        if not self.exists:
+        # try:
+            question = Question(self.processed_data.get('id'), self.processed_data.get('question'),
+                                self.processed_data.get('answer'), self.processed_data.get('created_at'),
+                                self.processed_data.get('category_id'))
+            db.session.add(question)
+            db.session.flush()
+            db.session.commit()
+            print('ok')
+        # except (IntegrityError, PendingRollbackError):
+        #     return 'Forbidden', 403
+            return "Successful", 200
 
     def convert_time(self, time: str):
-        return datetime.strptime(time, '%Y-%m-%d %H:%M:%S.%f')
+        return datetime.strptime(time, self.TIME_FORMAT)
+
+
+
+#
+#
+# def get_question(count):
+#     for i in range(count):
+#         a = JServiceApiQuestion()
+#         if check_db(a.processed_data.get('id')):
+#             a = JServiceApiQuestion()
+#             a.commit_to_db()
+#         else:
+#             a.commit_to_db()
 
 
 class Question(db.Model):
@@ -73,8 +84,5 @@ class Question(db.Model):
         self.created_at = created_at
         self.category_id = category_id
 
-
-
-
-
-
+    def __repr__(self):
+        return f'{self.question_id}: {self.question_text}'
