@@ -1,23 +1,30 @@
 from service import app
 from flask import request
 from requests import get
-from .models import JServiceApiQuestion, make_request, check_question_exists, get_last_question
+from .helpers import make_request, check_question_exists, get_last_question
+from .models import JServiceApiQuestion
 
 
 @app.route('/count', methods=['GET', 'POST'])
 def count():
-    last_question = get_last_question()
-    questions_num = request.json.get('questions_num')
+    """
+    View принимает запрос по методу POST с аргументом
+    question_num: int, после чего запрашивает у API jservice
+    нужное количество вопросов. Принимает число не более 100, так как за один раз
+    макс. количество запрашиваемых вопросов у jservice не может быть более 100
+    :return:
+    """
+    last_question: str = get_last_question()
+    questions_num: int = request.json.get('questions_num')
     if questions_num < 101:
         req: list = get(f"https://jservice.io/api/random?count={questions_num}").json()
         for item in req:
-            a = JServiceApiQuestion(item)
-            if not check_question_exists(a.processed_data.get('id')):
-                print(check_question_exists(a.processed_data.get('id')))
-                a.commit_to_db()
+            question = JServiceApiQuestion(item)
+            if not check_question_exists(question.processed_data.get('id')):
+                question.commit_to_db()
             else:
-                b = JServiceApiQuestion(make_request())
-                b.commit_to_db()
+                another_question = JServiceApiQuestion(make_request())
+                another_question.commit_to_db()
         return last_question
     else:
         return "Too many questions requested, questions_num should be <= 100", 405

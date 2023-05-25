@@ -1,4 +1,3 @@
-from requests import get
 from service import db
 from datetime import datetime
 from json import dumps
@@ -14,9 +13,13 @@ class JServiceApiQuestion:
     TIME_FORMAT: str = '%Y-%m-%d %H:%M:%S.%f'
 
     def __init__(self, resp: dict[str, str | int | dict]) -> None:
+        """
+        При инициализации класс принимает словарь,
+        полученный из ответа API jservie
+        :param resp: dict
+        """
         self.data: dict[str, str | int | dict] = resp
         self.processed_data: dict[str, str | int | datetime] = self.extract_needed_data()
-
 
     def extract_needed_data(self) -> dict[str, str | int | datetime]:
         """
@@ -59,6 +62,11 @@ class JServiceApiQuestion:
 
 
 class Question(db.Model):
+    """
+    Класс наследуется от модели SQLAlchemy и содержит поля,
+    которые затем будут транслироваться в базу данных,
+    в таблицу __tablename__
+    """
     __tablename__ = "questions"
 
     id: int = db.Column(db.Integer(), nullable=False, primary_key=True)
@@ -83,38 +91,14 @@ class Question(db.Model):
         return f'{self.question_id}: {self.question_text}'
 
     def as_json(self) -> str:
+        """
+        Метод возвращает данные класса в виде json-строки
+        :return: str
+        """
         return dumps({
-            'id': self.id,
             'question_id': self.question_id,
             'question': self.question_text,
             'answer': self.question_answer,
             'category_id': self.category_id,
             'created_at': self.created_at.strftime(JServiceApiQuestion.TIME_FORMAT)
         })
-
-
-def get_last_question() -> str:
-    try:
-        last_q: str = db.session.query(Question).order_by(Question.id.desc()).first().as_json()
-        return last_q
-    except AttributeError:
-        return " "
-
-
-def check_question_exists(question_id: int) -> Question | None:
-    """
-
-    :param question_id:
-    :return:
-    """
-    return db.session.execute(db.select(Question).filter_by(question_id=question_id)).scalar()
-
-
-def make_request() -> dict:
-    """
-    Функция делает единичный запрос к API jservice
-    и возвращает словарь с результатом
-    :return: str
-    """
-    resp = get("https://jservice.io/api/random?count=1").json()[0]
-    return make_request() if check_question_exists(resp.get('id')) else resp

@@ -1,5 +1,4 @@
 import service
-
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from os import path
@@ -15,5 +14,3 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///test_task.db'
 db = SQLAlchemy(app)
 
 from service import routes
-
-
