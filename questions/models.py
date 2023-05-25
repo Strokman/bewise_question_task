@@ -1,4 +1,4 @@
-from service import db
+from questions import db
 from datetime import datetime
 from json import dumps
 

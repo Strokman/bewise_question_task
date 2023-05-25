@@ -1,11 +1,11 @@
-from service import app
+from questions import app
 from flask import request
 from requests import get
 from .helpers import make_request, check_question_exists, get_last_question
 from .models import JServiceApiQuestion
 
 
-@app.route('/count', methods=['GET', 'POST'])
+@app.route('/count', methods=['POST'])
 def count():
     """
     View принимает запрос по методу POST с аргументом

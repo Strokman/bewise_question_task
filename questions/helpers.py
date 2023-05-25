@@ -1,4 +1,4 @@
-from service import db
+from questions import db
 from .models import Question
 from requests import get
 
