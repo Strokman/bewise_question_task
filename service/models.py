@@ -5,20 +5,31 @@ from json import dumps
 
 
 class JServiceApiQuestion:
+    """
+    Класс предназначен для обработки ответа от
+    API jrevice и передачи данных в базу, используя класс Question
+    """
 
     REQUIRED_COLUMNS: tuple[str] = ('id', 'question', 'answer', 'created_at', 'category_id')
     TIME_FORMAT: str = '%Y-%m-%d %H:%M:%S.%f'
 
-    def __init__(self, resp: dict) -> None:
-        self.data: dict[str, str | int| dict] = resp
+    def __init__(self, resp: dict[str, str | int | dict]) -> None:
+        self.data: dict[str, str | int | dict] = resp
         self.processed_data: dict[str, str | int | datetime] = self.extract_needed_data()
+
 
     def extract_needed_data(self) -> dict[str, str | int | datetime]:
         """
-        Метод выделя
-        :return:
+        Метод выделяет словаря, полученного из json-строки
+        ответа API, необходимые для передачи в базу данных.
+        Названия необходимых для базы данных колонок
+        хранятся в константе-поле класса REQUIRED_COLUMNS.
+        Поле created_at (время создания вопроса) конвертируется в
+        формат datetime втроенного класса Python (шаблон форматирования
+        сохранен в поле класса TIME_FORMAT). Возвращает данные в формате
+        словаря.
+        :return: dict
         """
-
         temp_dict: dict[str, str | int | datetime] = dict()
         for key, value in self.data.items():
             if key in self.REQUIRED_COLUMNS:
@@ -71,7 +82,7 @@ class Question(db.Model):
     def __repr__(self) -> str:
         return f'{self.question_id}: {self.question_text}'
 
-    def as_json(self):
+    def as_json(self) -> str:
         return dumps({
             'id': self.id,
             'question_id': self.question_id,
