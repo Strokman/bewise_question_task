@@ -26,8 +26,6 @@ services:
       - default
     ports:
       - 5050:5000
-    command:
-      - sh -c "sleep 10"
     volumes:
       - ./app:/usr/src/app/app
       - ./migrations:/usr/src/app/migrations
