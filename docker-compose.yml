@@ -13,6 +13,7 @@ services:
       - 5050:5000
     volumes:
       - ./app:/usr/src/app/app
+      - ./migrations:/usr/src/app/migrations
     restart: always
 
   db:
