@@ -25,6 +25,6 @@ def count():
             else:
                 another_question = JServiceApiQuestion(make_request())
                 another_question.commit_to_db()
-        return last_question
+        return last_question + "\n"
     else:
         return "Too many questions requested, questions_num should be <= 100", 405
