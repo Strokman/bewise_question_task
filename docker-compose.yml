@@ -6,14 +6,13 @@ services:
     depends_on:
       - db
     environment:
-      SQLALCHEMY_DATABASE_URI: postgresql://test:test@db:5432/test
+      SQLALCHEMY_DATABASE_URI: postgresql://test:test@db/test
     networks:
       - default
     ports:
       - 5050:5000
-    volumes:
-      - ./app:/usr/src/app/app
-      - ./migrations:/usr/src/app/migrations
+#    volumes:
+#      - ./app:/usr/src/app/app
     restart: always
 
   db:
