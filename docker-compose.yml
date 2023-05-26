@@ -13,7 +13,7 @@ services:
       - 5555:5432
     restart: always
     command:
-      - mkdir postgres-data
+      - sh -c 'mkdir postgres-data'
     volumes:
       - ./postgres-data:/var/lib/postgresql/data
 
@@ -29,8 +29,7 @@ services:
     ports:
       - 5050:5000
     command:
-      - mkdir app
-      - mkdir migrations
+      - sh -c "mkdir app && mkdir migrations"
     volumes:
       - ./app:/usr/src/app/app
       - ./migrations:/usr/src/app/migrations
