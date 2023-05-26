@@ -11,8 +11,8 @@ services:
       - default
     ports:
       - 5050:5000
-#    volumes:
-#      - ./app:/usr/src/app/app
+    volumes:
+      - ./app:/usr/src/app/app
     restart: always
 
   db:
