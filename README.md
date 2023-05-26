@@ -3,3 +3,8 @@
 
 sample request
 curl -iX POST -H "Content-Type: application/json" -d '{"questions_num": integer}' http://127.0.0.1:{port_number}/count
+
+
+$ chmod +x create_service.sh
+
+$ ./create_service.sh
