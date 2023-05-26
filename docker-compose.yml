@@ -1,21 +1,6 @@
 version: '3.6'
 
 services:
-  question-task:
-    build: .
-    depends_on:
-      - db
-    environment:
-      SQLALCHEMY_DATABASE_URI: postgresql://test:test@db:5432/test
-    networks:
-      - default
-    ports:
-      - 5050:5000
-    volumes:
-      - ./app:/usr/src/app/app
-      - ./migrations:/usr/src/app/migrations
-    restart: always
-
   db:
     environment:
       POSTGRES_USER: test
@@ -27,5 +12,26 @@ services:
     ports:
       - 5555:5432
     restart: always
+    command:
+      - mkdir postgres-data
     volumes:
       - ./postgres-data:/var/lib/postgresql/data
+
+
+  question-task:
+    build: .
+    depends_on:
+      - db
+    environment:
+      SQLALCHEMY_DATABASE_URI: postgresql://test:test@db:5432/test
+    networks:
+      - default
+    ports:
+      - 5050:5000
+    command:
+      - mkdir app
+      - mkdir migrations
+    volumes:
+      - ./app:/usr/src/app/app
+      - ./migrations:/usr/src/app/migrations
+    restart: always
