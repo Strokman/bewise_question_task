@@ -71,8 +71,8 @@ class Question(db.Model):
 
     id: int = db.Column(db.Integer(), nullable=False, primary_key=True)
     question_id: int = db.Column(db.Integer(), nullable=False, unique=True)
-    question_text: str = db.Column(db.String(100), nullable=False)
-    question_answer: str = db.Column(db.String(30), nullable=False)
+    question_text: str = db.Column(db.String(1000), nullable=False)
+    question_answer: str = db.Column(db.String(1000), nullable=False)
     created_at: datetime = db.Column(db.DateTime, nullable=False)
     category_id: int = db.Column(db.Integer(), nullable=False)
 
