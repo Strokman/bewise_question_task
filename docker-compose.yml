@@ -30,3 +30,4 @@ services:
       - ./app:/usr/src/app/app
       - ./migrations:/usr/src/app/migrations
     restart: always
+    command: gunicorn -w 1 -b 0.0.0.0:00 wsgi:server
