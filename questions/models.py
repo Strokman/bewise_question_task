@@ -15,7 +15,7 @@ class JServiceApiQuestion:
     def __init__(self, resp: dict[str, str | int | dict]) -> None:
         """
         При инициализации класс принимает словарь,
-        полученный из ответа API jservie
+        полученный из ответа API jserviсe
         :param resp: dict
         """
         self.data: dict[str, str | int | dict] = resp

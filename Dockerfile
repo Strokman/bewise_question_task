@@ -11,7 +11,3 @@ RUN pip install -r requirements.txt
 
 # copy every content from the local directory to the image
 COPY . /app
-
-#ENTRYPOINT ["./gunicorn.sh"]
-# configure the container to run in an executed manner
-#CMD [ "app.py" ]
