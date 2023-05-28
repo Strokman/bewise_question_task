@@ -16,9 +16,9 @@ def count():
     """
     last_question: str = get_last_question()
     questions_num: int = request.json.get('questions_num')
-    if questions_num < 101:
-        req: list = get(f"https://jservice.io/api/random?count={questions_num}").json()
-        for item in req:
+    if 0 < questions_num < 101:
+        resp: list = get(f"https://jservice.io/api/random?count={questions_num}").json()
+        for item in resp:
             question = JServiceApiQuestion(item)
             if not check_question_exists(question.processed_data.get('id')):
                 question.commit_to_db()
@@ -27,4 +27,4 @@ def count():
                 another_question.commit_to_db()
         return last_question + "\n"
     else:
-        return "Too many questions requested, questions_num should be <= 100", 405
+        return "Please provide correct number of questions: 0 < questions_num < 100", 405
