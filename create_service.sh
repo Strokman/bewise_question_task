@@ -1,8 +1,10 @@
 #!/bin/sh
 
+DIR="postgres-data"
+if [ -d "$DIR" ]; then
+  echo "${DIR} exists"
+else
+ mkdir postgres-data
+fi
 
-#mkdir app && mkdir migrations &&
-
-mkdir postgres-data
-
-docker-compose up
+docker-compose up --build
