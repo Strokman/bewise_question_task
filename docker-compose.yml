@@ -19,7 +19,8 @@ services:
   question-task:
     build: .
     depends_on:
-      - db
+      db:
+        condition: service_healthy
     environment:
       SQLALCHEMY_DATABASE_URI: postgresql://test:test@db:5432/test
     networks:
