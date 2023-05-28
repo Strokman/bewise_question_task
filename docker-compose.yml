@@ -10,7 +10,7 @@ services:
     networks:
       - default
     ports:
-      - 5432:5432
+      - 5555:5432
     restart: always
     volumes:
       - ./postgres-data:/var/lib/postgresql/data
@@ -25,7 +25,7 @@ services:
     networks:
       - default
     ports:
-      - 5000:5000
+      - 5050:5000
 #    volumes:
 #      - ./app:/usr/src/app/app
 #      - ./migrations:/usr/src/app/migrations
