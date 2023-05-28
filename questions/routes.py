@@ -16,15 +16,18 @@ def count():
     """
     last_question: str = get_last_question()
     questions_num: int = request.json.get('questions_num')
-    if 0 < questions_num < 101:
-        resp: list = get(f"https://jservice.io/api/random?count={questions_num}").json()
-        for item in resp:
-            question = JServiceApiQuestion(item)
-            if not check_question_exists(question.processed_data.get('id')):
-                question.commit_to_db()
-            else:
-                another_question = JServiceApiQuestion(make_request())
-                another_question.commit_to_db()
-        return last_question
-    else:
-        return "Please provide correct number of questions: 0 < questions_num < 100", 405
+    try:
+        if 0 < questions_num < 101:
+            resp: list = get(f'https://jservice.io/api/random?count={questions_num}').json()
+            for item in resp:
+                question = JServiceApiQuestion(item)
+                if not check_question_exists(question.processed_data.get('id')):
+                    question.commit_to_db()
+                else:
+                    another_question = JServiceApiQuestion(make_request())
+                    another_question.commit_to_db()
+            return last_question
+        else:
+            return 'Please provide correct number of questions: 0 < questions_num < 100', 405
+    except TypeError:
+        return 'Please provide correct request', 400

@@ -67,7 +67,7 @@ class Question(db.Model):
     которые затем будут транслироваться в базу данных,
     в таблицу __tablename__
     """
-    __tablename__ = "questions"
+    __tablename__ = 'questions'
 
     id: int = db.Column(db.Integer(), nullable=False, primary_key=True)
     question_id: int = db.Column(db.Integer(), nullable=False, unique=True)

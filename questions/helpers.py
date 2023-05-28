@@ -13,7 +13,7 @@ def get_last_question() -> str:
     try:
         return db.session.query(Question).order_by(Question.id.desc()).first().as_json()
     except AttributeError:
-        return " "
+        return ' '
 
 
 def check_question_exists(question_id: int) -> Question | None:
@@ -33,5 +33,5 @@ def make_request() -> dict:
     и возвращает словарь с результатом
     :return: str
     """
-    resp = get("https://jservice.io/api/random?count=1").json()[0]
+    resp = get('https://jservice.io/api/random?count=1').json()[0]
     return make_request() if check_question_exists(resp.get('id')) else resp
