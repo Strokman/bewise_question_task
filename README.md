@@ -34,7 +34,7 @@ chmod +x create_service.sh
 Запросы к сервису можно осуществить с помощью утилиты curl
 
 ```
-curl -iX POST -H "Content-Type: application/json" -d '{"questions_num": int}' http://127.0.0.1:5050/count
+curl -iX POST -H "Content-Type: application/json" -d '{"questions_num": <int>}' http://127.0.0.1:5050/count
 ```
 
 Можно обратиться напрямую из python-скрипта, используя модуль requests
@@ -44,12 +44,12 @@ import requests
 
 url = 'http://127.0.0.1:5050/count'
 headers = {'content-type': 'application/json'}
-data = '{"questions_num": int}'
+data = '{"questions_num": <int>}'
 resp = requests.post(url, headers=headers, data=data)
 ```
 Обратите внимание, что тело запроса обязательно должно быть в форме json-строки, как указано в примерах.
 
-В Postman в качестве тела запроса можно передавать dict, так как он сам осуществляет сериализацию.
+Конечно можно использовать Postman и аналогичный софт.
 
 Вместо int следует указывать количество запрашиваемых вопросов - от 1 до 100 - так как JService принимает запросы
 не более чем на 100 вопросов единовременно. Если необходимо большее количество вопросов - сделайте несколько запросов.
