@@ -21,12 +21,9 @@ def count():
         for item in resp:
             question = JServiceApiQuestion(item)
             if not check_question_exists(question.processed_data.get('id')):
-                print(question.processed_data.get('id'), question.processed_data.get('question_id'))
-                print('not in base')
                 question.commit_to_db()
             else:
                 another_question = JServiceApiQuestion(make_request())
-                print('in base')
                 another_question.commit_to_db()
         return last_question
     else:
