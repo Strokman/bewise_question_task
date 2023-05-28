@@ -11,8 +11,7 @@ def get_last_question() -> str:
     :return: str
     """
     try:
-        last_q: str = db.session.query(Question).order_by(Question.id.desc()).first().as_json()
-        return last_q
+        return db.session.query(Question).order_by(Question.id.desc()).first().as_json()
     except AttributeError:
         return " "
 

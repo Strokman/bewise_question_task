@@ -5,8 +5,8 @@ from os import getenv
 
 
 app = Flask(__name__)
-db = SQLAlchemy()
 app.config['SQLALCHEMY_DATABASE_URI'] = getenv('SQLALCHEMY_DATABASE_URI')
+db = SQLAlchemy()
 db.init_app(app)
 
 from questions import routes
