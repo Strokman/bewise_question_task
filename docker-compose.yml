@@ -26,8 +26,8 @@ services:
       - default
     ports:
       - 5000:5000
-    volumes:
-      - ./app:/usr/src/app/app
-      - ./migrations:/usr/src/app/migrations
+#    volumes:
+#      - ./app:/usr/src/app/app
+#      - ./migrations:/usr/src/app/migrations
     restart: always
     command: gunicorn -w 1 -b 0.0.0.0:5000 app:app
