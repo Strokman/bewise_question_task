@@ -47,7 +47,7 @@ chmod +x create_service.sh
 Обращаться к сервису можно через командную строку утилитой `curl`, а также любым подходящим софтом (Postman и т.д.).
 
 ```
-curl -iX POST -H "Content-Type: application/json" -d '{"questions_num": <int>}' http://127.0.0.1:5050/api/count
+curl -iX POST -H "Content-Type: application/json" -d '{"questions_num": <int>}' http://localhost:5050/api/count
 ```
 
 Обратите внимание, что тело запроса обязательно должно быть в форме json-строки, как указано в примерах.

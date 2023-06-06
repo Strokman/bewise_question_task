@@ -22,7 +22,7 @@ services:
       - ./postgres-data:/var/lib/postgresql/data
 
 
-  question:
+  web:
     build: .
     depends_on:
       db:
