@@ -1,12 +1,12 @@
 from questions import app
-from flask import request, abort, jsonify
+from flask import request, abort, jsonify, Response
 from requests import get
 from .helpers import make_request, check_question_exists, get_last_question
 from .models import JServiceApiQuestion
 
 
 @app.route('/api/count', methods=['POST'])
-def count():
+def count() -> tuple[Response, int]:
     """
     View принимает запрос по методу POST с аргументом
     question_num: int, после чего запрашивает у API jservice
@@ -30,7 +30,7 @@ def count():
                 else:
                     another_question = JServiceApiQuestion(make_request())
                     another_question.commit_to_db()
-            return jsonify(last_question)
+            return jsonify(last_question), 200
         else:
             abort(405, description='Please provide correct number of questions: 0 < questions_num < 101')
     except TypeError:
@@ -38,20 +38,20 @@ def count():
 
 
 @app.errorhandler(400)
-def resource_not_found(e):
+def resource_not_found(e) -> tuple[Response, int]:
     return jsonify(error=str(e)), 400
 
 
 @app.errorhandler(404)
-def resource_not_found(e):
+def resource_not_found(e) -> tuple[Response, int]:
     return jsonify(error=str(e), description='Please use correct route - http://host:port/api/count'), 404
 
 
 @app.errorhandler(405)
-def incorrect_num(e):
+def incorrect_num(e) -> tuple[Response, int]:
     return jsonify(error=str(e)), 405
 
 
 @app.errorhandler(415)
-def incorrect_header(e):
+def incorrect_header(e) -> tuple[Response, int]:
     return jsonify(error=str(e), description='Provide correct header - Content-Type: application/json'), 415
