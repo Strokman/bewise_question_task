@@ -3,17 +3,17 @@ from .models import Question
 from requests import get
 
 
-def get_last_question() -> str:
+def get_last_question() -> dict:
     """
     Функция делает запрос к базе и возвращает последний
     добавленный в нее вопрос (сортирует выдачу по id в порядке убывания
     и берет первую запись)
-    :return: str
+    :return: dict
     """
     try:
-        return db.session.query(Question).order_by(Question.id.desc()).first().as_json()
+        return db.session.query(Question).order_by(Question.id.desc()).first().as_dict()
     except AttributeError:
-        return ' '
+        return {}
 
 
 def check_question_exists(question_id: int) -> Question | None:
@@ -31,7 +31,7 @@ def make_request() -> dict:
     """
     Функция делает единичный запрос к API jservice
     и возвращает словарь с результатом
-    :return: str
+    :return: dict
     """
-    resp = get('https://jservice.io/api/random?count=1').json()[0]
-    return make_request() if check_question_exists(resp.get('id')) else resp
+    response = get('https://jservice.io/api/random?count=1').json()[0]
+    return make_request() if check_question_exists(response.get('id')) else response

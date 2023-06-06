@@ -1,6 +1,5 @@
 from questions import db
 from datetime import datetime
-from json import dumps
 
 
 class JServiceApiQuestion:
@@ -90,15 +89,15 @@ class Question(db.Model):
     def __repr__(self) -> str:
         return f'{self.question_id}: {self.question_text}'
 
-    def as_json(self) -> str:
+    def as_dict(self) -> dict:
         """
-        Метод возвращает данные класса в виде json-строки
+        Метод возвращает данные класса в виде словаря
         :return: str
         """
-        return dumps({
+        return {
             'question_id': self.question_id,
             'question': self.question_text,
             'answer': self.question_answer,
             'category_id': self.category_id,
             'created_at': self.created_at.strftime(JServiceApiQuestion.TIME_FORMAT)
-        })
+        }
